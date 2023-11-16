@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://u34jv0pvhy5o"]
+[gd_scene load_steps=74 format=3 uid="uid://u34jv0pvhy5o"]
 
 [ext_resource type="Texture2D" uid="uid://bykttgiekb6sv" path="res://Image/backgound2.png" id="1_aawgc"]
 [ext_resource type="Texture2D" uid="uid://d1dikwsp52cb3" path="res://Image/Terrain (16x16).png" id="2_65psc"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://b4uv33xxo72ik" path="res://Animation/Checkpoint (Flag Out) (64x64).png" id="6_wr6ak"]
 [ext_resource type="Script" path="res://Script/flag.gd" id="7_ufdj5"]
 [ext_resource type="Script" path="res://Script/GameCamera2D.gd" id="9_ktbmf"]
+[ext_resource type="Script" path="res://Script/Coins.gd" id="13_dayix"]
+[ext_resource type="PackedScene" uid="uid://34r4tblivdow" path="res://Scenes/apple.tscn" id="14_qeen1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s7a6y"]
 texture = ExtResource("2_65psc")
@@ -911,6 +913,22 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="FontFile" id="FontFile_o3hd1"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/40/0 = Vector2(0, 0)
+cache/0/40/0/ascent = 0.0
+cache/0/40/0/descent = 0.0
+cache/0/40/0/underline_position = 0.0
+cache/0/40/0/underline_thickness = 0.0
+cache/0/40/0/scale = 1.0
+cache/0/40/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/40/0/kerning_overrides/40/0 = Vector2(0, 0)
+
 [node name="Node" type="Node"]
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -949,7 +967,7 @@ layer_0/tile_data = PackedInt32Array(720896, 655360, 0, 720897, 655360, 0, 72089
 
 [node name="Main_character" parent="." instance=ExtResource("3_2ahc1")]
 texture_filter = 1
-position = Vector2(138, 104)
+position = Vector2(148, 505)
 scale = Vector2(0.765, 0.765)
 
 [node name="Flag" type="AnimatedSprite2D" parent="."]
@@ -963,8 +981,55 @@ script = ExtResource("7_ufdj5")
 [node name="Void_y" type="Node2D" parent="."]
 position = Vector2(1222, 867)
 
+[node name="End" type="Node2D" parent="."]
+position = Vector2(11267, 384)
+
 [node name="SafeSpawn" type="Node2D" parent="."]
 position = Vector2(123, 290)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("9_ktbmf")
+
+[node name="Coins" type="RichTextLabel" parent="."]
+texture_filter = 1
+offset_left = -914.0
+offset_top = -487.0
+offset_right = -632.0
+offset_bottom = -408.0
+theme_override_colors/default_color = Color(1, 0.603922, 0.427451, 1)
+theme_override_fonts/normal_font = SubResource("FontFile_o3hd1")
+theme_override_font_sizes/normal_font_size = 40
+text = "Coins : 1000"
+scroll_active = false
+tab_size = 17
+script = ExtResource("13_dayix")
+
+[node name="Apple" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(746, 437)
+
+[node name="Apple2" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(1568, 54)
+
+[node name="Apple3" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(2873, -167)
+
+[node name="Apple4" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(3755, -77)
+
+[node name="Apple5" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(3916, -157)
+
+[node name="Apple6" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(4087, -77)
+
+[node name="Apple7" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(8119, -555)
+
+[node name="Apple8" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(5665, -324)
+
+[node name="Apple9" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(7333, -233)
+
+[node name="Apple10" parent="." instance=ExtResource("14_qeen1")]
+position = Vector2(10397, -449)

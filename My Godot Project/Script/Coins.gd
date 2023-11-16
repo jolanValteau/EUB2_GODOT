@@ -1,8 +1,10 @@
-extends Camera2D
+extends RichTextLabel
 
 @onready var end = $"../End"
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	position = lerp(position, Main.character.position, delta * 10)
+	self.text = "Coins : " + str(Main.character.coinsCollected)
+	position = lerp(position, Main.character.position - get_viewport().size * 0.49, delta * 20)
 	global_position.x = clamp(global_position.x, get_viewport().size.x/2+2, end.global_position.x - (get_viewport().size.x/2))
-	global_position.y = clamp(global_position.y, -100000, 450)
+	global_position.y = 0

@@ -2,6 +2,8 @@ class_name Character
 
 extends CharacterBody2D
 
+var coinsCollected = 0
+
 const Speed = 500.0
 const Jump_velocity = -750
 var GravityBoost = 2
