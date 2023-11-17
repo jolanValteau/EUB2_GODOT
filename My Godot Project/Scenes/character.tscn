@@ -204,10 +204,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qpu7t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_i15kk")
 }],
 "loop": false,
 "name": &"DoubleJumping",
-"speed": 5.0
+"speed": 16.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -427,7 +430,9 @@ script = ExtResource("5_2vtcg")
 position = Vector2(0, -70)
 scale = Vector2(4, 4.25)
 sprite_frames = SubResource("SpriteFrames_c72lp")
-animation = &"Invisible"
+animation = &"DoubleJumping"
+frame = 5
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2, -56.625)

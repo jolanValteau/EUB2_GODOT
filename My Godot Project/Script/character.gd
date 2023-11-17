@@ -33,7 +33,7 @@ func _physics_process(delta):
 
 	if (not isKinematic):
 		# Running/Idle animation switch
-		if ((velocity.x > 0 || velocity.x < -0)):
+		if ((velocity.x > 0 || velocity.x < -0) && (canDoubleJump || not Sprite_2d.is_playing())):
 			Sprite_2d.animation = "Running"
 		else:
 			Sprite_2d.animation = "Default"
@@ -52,10 +52,12 @@ func _physics_process(delta):
 		# Direction y controller (gravity) + Jump/Fall animation switch
 		if (not is_on_floor()):
 			velocity.y += gravity * delta * GravityBoost
-			if (velocity.y < 0):
+			if (velocity.y < 0 && (canDoubleJump || not Sprite_2d.is_playing())):
 				Sprite_2d.animation = "Jumping"
-			else:
+			elif (canDoubleJump || not Sprite_2d.is_playing()):
 				Sprite_2d.animation = "Falling"
+		else:
+			canDoubleJump = true
 
 		# Direction x controller (Input) + Left/Right sprite_2d.flip_h switch
 		var Direction = Input.get_axis("Left", "Right")

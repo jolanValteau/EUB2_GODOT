@@ -5,6 +5,6 @@ extends RichTextLabel
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	self.text = "Coins : " + str(Main.character.coinsCollected)
-	position = lerp(position, Main.character.position - get_viewport().size * 0.49, delta * 20)
+	position = lerp(position, Main.character.position - get_viewport().size * 0.49, delta)
 	global_position.x = clamp(global_position.x, get_viewport().size.x/2+2, end.global_position.x - (get_viewport().size.x/2))
-	global_position.y = 0
+	global_position.y = clamp(global_position.y, -100000, 0)
