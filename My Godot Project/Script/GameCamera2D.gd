@@ -7,4 +7,5 @@ extends Camera2D
 func _process(delta):
 	position = lerp(position, Main.character.position, delta * 10)
 	global_position.x = clamp(global_position.x, get_viewport().size.x/2+2, end.global_position.x - (get_viewport().size.x/2))
-	global_position.y = clamp(global_position.y, -100000, void_y)
+	global_position.y = clamp(global_position.y, -100000, void_y.global_position.y - (get_viewport().size.y/2))
+	

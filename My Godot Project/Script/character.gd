@@ -17,7 +17,9 @@ var GravityBoost = 2
 var hasEffect = false # disable respawn and other effects
 var isKinematic = false # disable Input and movement animations
 
+var canJump = true
 var canDoubleJump = true
+var canWallJump = true
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready():
@@ -26,6 +28,8 @@ func _ready():
 	hasEffect = false
 	isKinematic = false
 	canDoubleJump = true
+	canJump = true
+	canWallJump = true
 
 func _physics_process(delta):
 	if (not hasEffect && Character.transform.get_origin().y >= Void_y.transform.get_origin().y):
@@ -33,40 +37,62 @@ func _physics_process(delta):
 
 	if (not isKinematic):
 		# Running/Idle animation switch
-		if ((velocity.x > 0 || velocity.x < -0) && (canDoubleJump || not Sprite_2d.is_playing())):
-			Sprite_2d.animation = "Running"
-		else:
-			Sprite_2d.animation = "Default"
+		if (is_on_floor()):
+			if ((velocity.x > 0 || velocity.x < -0)):
+				Sprite_2d.animation = "Running"
+			else:
+				Sprite_2d.animation = "Default"
 
+		if (Input.is_action_just_pressed("Jump")):
 		# Jump
-		if (Input.is_action_just_pressed("Jump") && is_on_floor()):
-			velocity.y = Jump_velocity * 1.5
-			Sprite_2d.animation = "Jumping"
-			canDoubleJump = true
-		# Double Jump
-		elif (canDoubleJump && Input.is_action_just_pressed("Jump") && not is_on_floor()):
-			velocity.y = Jump_velocity
-			Sprite_2d.play("DoubleJumping")
-			canDoubleJump = false
+			if (canJump && canWallJump):
+				canJump = false
+				velocity.y = Jump_velocity * 1.5
+				Sprite_2d.animation = "Jumping"
+				canDoubleJump = true
+			# Double Jump
+			elif (canDoubleJump):
+				canDoubleJump = false
+				velocity.y = Jump_velocity
+				Sprite_2d.play("DoubleJumping")
+				# canJump = true # moon jump
+			elif (not canWallJump && canJump):
+				canJump = false
+				canDoubleJump = false
+				velocity.y = Jump_velocity * 1.5
+				velocity.x = 100
+				Sprite_2d.animation = "Jumping"
 
 		# Direction y controller (gravity) + Jump/Fall animation switch
 		if (not is_on_floor()):
-			velocity.y += gravity * delta * GravityBoost
-			if (velocity.y < 0 && (canDoubleJump || not Sprite_2d.is_playing())):
-				Sprite_2d.animation = "Jumping"
-			elif (canDoubleJump || not Sprite_2d.is_playing()):
-				Sprite_2d.animation = "Falling"
-		else:
-			canDoubleJump = true
+			if (not canWallJump && canJump):
+				velocity.y = 0
+				Sprite_2d.animation = "WallJumping"
+			else:
+				velocity.y += gravity * delta * GravityBoost
+			if (canDoubleJump || velocity.y > 0):
+				if (velocity.y < 0): # Jump if going up ^
+					Sprite_2d.animation = "Jumping"
+				else: # else fall
+					Sprite_2d.animation = "Falling"
+		if (is_on_floor() && (  (canDoubleJump && velocity.y >= 0) || (not canDoubleJump && not canJump))  ):
+			canJump = true
+			canDoubleJump = false
+			canWallJump = true
+		if (is_on_wall() && canWallJump):
+			canWallJump = false
+			canJump = true
+			canDoubleJump = false
 
 		# Direction x controller (Input) + Left/Right sprite_2d.flip_h switch
 		var Direction = Input.get_axis("Left", "Right")
 		var isLeft = Direction < 0
-		if Direction:
-			Sprite_2d.flip_h = isLeft
-			velocity.x = Direction * Speed
-		else:
-			velocity.x = move_toward(velocity.x, 0, 15)
+		if (not (not canWallJump && canJump)):
+			if Direction:
+				Sprite_2d.flip_h = isLeft
+				velocity.x = Direction * Speed
+			else:
+				velocity.x = move_toward(velocity.x, 0, delta * 2000)
 
 	#update
 	move_and_slide()
@@ -76,6 +102,7 @@ func _physics_process(delta):
 func Respawn():
 	hasEffect = true
 	isKinematic = true
+	canDoubleJump = true
 	velocity = Vector2.ZERO
 	Sprite_2d.animation = "Invisible"
 	Sprite_effect.play("Despawn")
